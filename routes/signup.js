@@ -5,7 +5,7 @@ const signupController = require('../controllers/signupController');
 
 router.use(bodyParser.json());
 
-// router.get("/", signupController.signup_get);
+router.get("/", signupController.signup_get);
 router.post("/", signupController.signup_post);
 
 
