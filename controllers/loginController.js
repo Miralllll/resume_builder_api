@@ -1,10 +1,8 @@
 const { createToken, maxAge } = require("./token");
 const User = require("../models/User");
-const jwt = require("jsonwebtoken");
 
 module.exports.login_get = (req, res) => {
-  console.log("heree");
-  // res.render('login');
+  res.status(200).send("0");
 };
 
 // handle errors

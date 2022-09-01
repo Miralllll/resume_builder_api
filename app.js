@@ -12,6 +12,7 @@ var uploadApiRouter = require("./routes/upload");
 var sendApiRouter = require("./routes/send");
 var loginApiRouter = require("./routes/login");
 var signupApiRouter = require("./routes/signup");
+var resumesApiRouter = require("./routes/resumes");
 
 var app = express();
 var cors = require("cors");
@@ -43,6 +44,7 @@ app.use("/send", sendApiRouter);
 app.use("/upload", uploadApiRouter);
 app.use("/login", loginApiRouter);
 app.use("/signup", signupApiRouter);
+app.use("/resumes", resumesApiRouter);
 
 // database
 const dbURI =
@@ -88,5 +90,6 @@ app.get("/set-cookies", (req, res) => {
 //   res.status(err.status || 500);
 //   res.render('error');
 // });
+
 
 module.exports = app;
