@@ -11,6 +11,7 @@ var usersRouter = require("./routes/users");
 var uploadApiRouter = require("./routes/upload");
 var sendApiRouter = require("./routes/send");
 var loginApiRouter = require("./routes/login");
+var logoutApiRouter = require("./routes/logout");
 var signupApiRouter = require("./routes/signup");
 var resumesApiRouter = require("./routes/resumes");
 
@@ -30,7 +31,7 @@ app.set("view engine", "jade");
 
 app.use(fileupload());
 
-app.use(cors({credentials: true, origin: 'http://localhost:3008'}));
+app.use(cors({ credentials: true, origin: "http://localhost:3008" }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -45,6 +46,7 @@ app.use("/upload", uploadApiRouter);
 app.use("/login", loginApiRouter);
 app.use("/signup", signupApiRouter);
 app.use("/resumes", resumesApiRouter);
+app.use("/logout", logoutApiRouter);
 
 // database
 const dbURI =
@@ -90,6 +92,5 @@ app.get("/set-cookies", (req, res) => {
 //   res.status(err.status || 500);
 //   res.render('error');
 // });
-
 
 module.exports = app;
