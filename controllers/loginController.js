@@ -2,7 +2,7 @@ const { createToken, maxAge } = require("./token");
 const User = require("../models/User");
 
 module.exports.login_get = (req, res) => {
-  res.status(200).send("0");
+  res.status(401).send();
 };
 
 // handle errors
@@ -32,7 +32,7 @@ module.exports.login_post = async (req, res) => {
   try {
     // check if those are valid
     const user = await User.login(email, password);
-    console.log("bla" + user);
+    console.log(user);
     // create jwt if they are valid
     const token = createToken(user._id);
     res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });

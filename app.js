@@ -30,7 +30,7 @@ app.set("view engine", "jade");
 
 app.use(fileupload());
 
-app.use(cors(corsOptions));
+app.use(cors({credentials: true, origin: 'http://localhost:3008'}));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

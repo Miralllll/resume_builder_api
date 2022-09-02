@@ -7,7 +7,7 @@ var bodyParser = require("body-parser");
 // parse application/json
 router.use(bodyParser.json());
 
-router.get("/", resumesController.profile_get);
-router.get("/", resumesController.profile_post);
+router.get("/", requireAuth, resumesController.profile_get);
+router.post("/", requireAuth, resumesController.profile_post);
 
 module.exports = router;
