@@ -57,9 +57,9 @@ const dbURI =
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) =>
-    app.listen(3040, "0.0.0.0", () => {
-      console.log(`Express web server started: http://0.0.0.0:3040}`);
-      console.log(`Serving content from /3040}/`);
+    app.listen(process.env.PORT || 3040, "0.0.0.0", () => {
+      console.log(`Express web server started: http://0.0.0.0:${process.env.PORT || 3040}}`);
+      console.log(`Serving content from /${process.env.PORT || 3040}/`);
     })
   )
   .catch((err) => console.log(err));
