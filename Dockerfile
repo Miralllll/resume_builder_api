@@ -1,7 +1,8 @@
 # specify a parent docker image
 FROM node:17-alpine
 
-LABEL description="This is the base docker image for backend API."
+# package that restarts server when something changes in the package
+RUN npm install -g nodemon
 
 # below all runs from this directory
 WORKDIR /apps
@@ -22,4 +23,5 @@ COPY . .
 
 EXPOSE 3040
 
-CMD ["npm", "start"]
+# // -L means that it will work with docker (in dev script)
+CMD ["npm", "run", "dev"]
