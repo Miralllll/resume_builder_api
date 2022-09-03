@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // checking user for every get
-app.get('*', checkUser);
+// app.get('*', checkUser);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/send", sendApiRouter);

@@ -2,6 +2,7 @@ const { createToken, maxAge } = require("./token");
 const User = require("../models/User");
 
 module.exports.login_get = (req, res) => {
+  conosle.log("here");
   res.status(401).send();
 };
 
