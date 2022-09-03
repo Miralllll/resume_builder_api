@@ -1,17 +1,20 @@
-name: Deploy Backend to heroku.
+# Your workflow name.
+name: Deploy to heroku.
 
-# Run workflow on every push to main branch.
+# Run workflow on every push to master branch.
 on:
   push:
-    branches: ["main"]
+    branches: [master]
 
-# Your workflow jobs
+# Your workflows jobs.
 jobs:
   build:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
+      # Check-out your repository.
       - name: Checkout
-        users: actions/checkout@v2
+        uses: actions/checkout@v2
+
 
 ### ⬇ IMPORTANT PART ⬇ ###
 
