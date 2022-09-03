@@ -3,6 +3,7 @@ var express = require("express");
 const mongoose = require("mongoose");
 var path = require("path");
 // middle --- halp to parse cookies
+const {requireAuth, checkUser} = require('./middleware/authMiddleware');
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
@@ -39,6 +40,8 @@ app.use(cookieParser());
 // middleware
 app.use(express.static(path.join(__dirname, "public")));
 
+// checking user for every get
+app.get('*', checkUser);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/send", sendApiRouter);
