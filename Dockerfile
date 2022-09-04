@@ -1,4 +1,6 @@
 # specify a parent docker image
+FROM miktex/miktex
+
 FROM node:17-alpine
 
 # package that restarts server when something changes in the package
@@ -21,7 +23,7 @@ COPY . .
 
 # COPY ["package.json", "package-lock.json", "./"]
 
-EXPOSE 3040
+EXPOSE 3050
 
 # // -L means that it will work with docker (in dev script)
 CMD ["npm", "run", "dev"]

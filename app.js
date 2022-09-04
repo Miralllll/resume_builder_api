@@ -32,7 +32,7 @@ app.set("view engine", "jade");
 
 app.use(fileupload());
 
-app.use(cors({ credentials: true, origin: "http://localhost:3008" }));
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -57,9 +57,9 @@ const dbURI =
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) =>
-    app.listen(process.env.PORT || 3040, "0.0.0.0", () => {
-      console.log(`Express web server started: http://0.0.0.0:${process.env.PORT || 3040}}`);
-      console.log(`Serving content from /${process.env.PORT || 3040}/`);
+    app.listen(process.env.PORT || 3050, "0.0.0.0", () => {
+      console.log(`Express web server started: http://0.0.0.0:${process.env.PORT || 3050}}`);
+      console.log(`Serving content from /${process.env.PORT || 3050}/`);
     })
   )
   .catch((err) => console.log(err));
