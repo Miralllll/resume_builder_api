@@ -32,7 +32,7 @@ app.set("view engine", "jade");
 
 app.use(fileupload());
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors({ credentials: true, origin: "https://r-esume-b-uilder.herokuapp.com/" }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -74,6 +74,9 @@ app.get("/set-cookies", (req, res) => {
   // httpOnly: true -- no fronend access to it -- onyl transporting
   res.cookie("isEmployee", true, {
     maxAge: 1000 * 60 * 60 * 24,
+    sameSite : "none",
+    domain: "https://r-esume-b-uilder.herokuapp.com/",
+    secure: true,
     httpOnly: true,
   });
   res.send("you got the cookies!");
