@@ -36,7 +36,7 @@ module.exports.login_post = async (req, res) => {
     console.log(user);
     // create jwt if they are valid
     const token = createToken(user._id);
-    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000, domain: "https://r-esume-b-uilder.herokuapp.com/", secure: true,});
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000, secure: true,});
     res.status(200).json({ user: user._id });
   } catch (err) {
     const errors = handleErrors(err);

@@ -1,12 +1,12 @@
 var express = require("express");
 var router = express.Router();
 var bodyParser = require("body-parser");
-const loginController = require("../controllers/loginController");
 const {requireAuth, checkUser} = require('../middleware/authMiddleware');
+const isauthController = require("../controllers/isauthController");
 
 router.use(bodyParser.json());
 
-router.get("/", loginController.login_get);
-router.post("/", loginController.login_post);
+router.get("/", checkUser, isauthController.isauth_get);
+router.post("/", checkUser, isauthController.isauth_post);
 
 module.exports = router;

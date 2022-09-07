@@ -2,10 +2,12 @@ var createError = require("http-errors");
 var express = require("express");
 const mongoose = require("mongoose");
 var path = require("path");
+
 // middle --- halp to parse cookies
 const {requireAuth, checkUser} = require('./middleware/authMiddleware');
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const methodOverride = require('method-override');
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -15,16 +17,11 @@ var loginApiRouter = require("./routes/login");
 var logoutApiRouter = require("./routes/logout");
 var signupApiRouter = require("./routes/signup");
 var resumesApiRouter = require("./routes/resumes");
+var authApiRouter = require("./routes/isauth");
 
 var app = express();
 var cors = require("cors");
 const fileupload = require("express-fileupload");
-
-const corsOptions = {
-  origin: "*",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -32,8 +29,10 @@ app.set("view engine", "jade");
 app.set("trust proxy", 1);
 
 app.use(fileupload());
+app.use(methodOverride('_method'));
 
 app.use(cors({ credentials: true, origin: "https://r-esume-b-uilder.herokuapp.com/" }));
+app.use("/files", express.static(path.join(__dirname, "upload")));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,11 +45,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/send", sendApiRouter);
-app.use("/upload", uploadApiRouter);
+app.use("/upload", checkUser, uploadApiRouter);
 app.use("/login", loginApiRouter);
 app.use("/signup", signupApiRouter);
-app.use("/resumes", resumesApiRouter);
+app.use("/resumes", checkUser, resumesApiRouter);
 app.use("/logout", logoutApiRouter);
+app.use("/isauth", authApiRouter);
 
 // database
 const dbURI =
