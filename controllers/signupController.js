@@ -2,17 +2,16 @@ const { createToken, maxAge } = require("./token");
 const User = require("../models/User");
 
 module.exports.signup_get = (req, res) => {
-  // res.render('signup');
+  console.log("signup_get");
+  res.status(200).send();
 };
 
 // handle errors
 const handleErrors = (err) => {
-  console.log(err.message, err.code);
-  let errors = { email: "", password: "" };
+  let errors = { email: "", password: "", name: "" };
   // duplicates error code
-  console.log(err.code);
   if (err.code === 11000) {
-    errors.email = "That email is already registered!";
+    errors.email = "Email Already Registered";
     return errors;
   }
   // validation errors
@@ -25,9 +24,9 @@ const handleErrors = (err) => {
 };
 
 module.exports.signup_post = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, name } = req.body;
   try {
-    const user = await User.create({ email, password });
+    const user = await User.create({ name, email, password });
     // cookie send json webtoken
     // it created token forest
     const token = createToken(user._id);

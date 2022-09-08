@@ -1,26 +1,65 @@
 const { requireAuth } = require("./token");
-// const Document = require("../models/Document");
+const Document = require("../models/Document");
+const { join, resolve } = require("path");
 
 module.exports.profile_get = async (req, res) => {
-  console.log("get");
-  console.log("here" + req.body + " " + res);
-  if(res.locals.user === null) res.status(401).send();
-
+  console.log("profile get");
+  if (res.locals.user === null) res.status(401).send();
   res.status(200).send();
 };
 
 module.exports.profile_post = async (req, res) => {
-  console.log("post");
-  console.log(res.locals.user_id);
-  if(res.locals.user === null) res.status(401).send();
-  // try {
-  //   // const user = await Document.create({createdBy: res.locals.user });
-  //   // cookie send json webtoken
-  //   // it created token forest
-  //   res.status(201).json({ user: user._id });
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(400).json({ });
-  // }
-  res.status(200).send();
+  if (res.locals.user === null) res.status(401).send();
+  try {
+    var required_fields = ["title", "createdDate", "document"];
+    var docs = await Document.getAll(res.locals.user._id, required_fields);
+    res.status(200).json({ user_name: res.locals.user.name, docs: docs });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err });
+  }
+};
+
+module.exports.delete_post = async (req, res) => {
+  if (res.locals.user === null) res.status(401).send();
+  const { title } = req.body;
+  try {
+    await Document.deleteOne({ title: title });
+    res.status(200).json({});
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err });
+  }
+};
+
+module.exports.add_post = async (req, res) => {
+  if (res.locals.user === null) res.status(401).send({ errors: "Not Auth" });
+  const { title, formInfo, document } = req.body;
+  try {
+    var doc = await Document.addOrUpdate(
+      res.locals.user._id,
+      title,
+      formInfo,
+      document
+    );
+    res.status(200).json({ title: doc.title });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ errors: err });
+  }
+};
+
+module.exports.get_post = async (req, res) => {
+  if (res.locals.user === null) res.status(401).send({ errors: "Not Auth" });
+  const { label } = req.body;
+  try {
+    const doc = await Document.findOne({
+      createdBy: res.locals.user._id,
+      title: label,
+    });
+    res.status(200).json({ document: doc.document, formInfo: doc.formInfo });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ errors: err });
+  }
 };

@@ -20,15 +20,20 @@ module.exports.upload_post = async (req, res) => {
   res.setHeader("Content-Type", "application/pdf");
   const pdf = latex(text, options);
   if (res.locals.user !== null && res.locals.user !== undefined) {
-      console.log("whyyy" + res.locals.user._id);
-      var doc = await Document.addOrUpdate(res.locals.user._id, `doc created by `, req.body.form, pdf);
-      console.log(doc);
+    // it should be same document actually, because i do nto have label now, it is okay
+    var doc = await Document.addOrUpdate(
+      res.locals.user._id,
+      req.body.title,
+      req.body.form,
+      text
+    );
   }
   pdf.pipe(res);
   pdf.on("error", (err) => {
-    // console.log("error" + err.message);
     res.removeHeader("Content-Type");
     res.status(400).send(JSON.stringify({ error: err.message }));
   });
-  pdf.on("finish", () => {});
+  pdf.on("finish", () => {
+    console.log("All writes are now complete.");
+  });
 };

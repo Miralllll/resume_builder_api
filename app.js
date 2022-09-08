@@ -4,15 +4,14 @@ const mongoose = require("mongoose");
 var path = require("path");
 
 // middle --- halp to parse cookies
-const {requireAuth, checkUser} = require('./middleware/authMiddleware');
+const { requireAuth, checkUser } = require("./middleware/authMiddleware");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const methodOverride = require('method-override');
+const methodOverride = require("method-override");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var uploadApiRouter = require("./routes/upload");
-var sendApiRouter = require("./routes/send");
 var loginApiRouter = require("./routes/login");
 var logoutApiRouter = require("./routes/logout");
 var signupApiRouter = require("./routes/signup");
@@ -29,7 +28,7 @@ app.set("view engine", "jade");
 app.set("trust proxy", 1);
 
 app.use(fileupload());
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 
 app.use(cors({ credentials: true, origin: "https://r-esume-b-uilder.herokuapp.com/" }));
 app.use("/files", express.static(path.join(__dirname, "upload")));
@@ -44,11 +43,11 @@ app.use(express.static(path.join(__dirname, "public")));
 // app.get('*', checkUser);
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/send", sendApiRouter);
 app.use("/upload", checkUser, uploadApiRouter);
 app.use("/login", loginApiRouter);
 app.use("/signup", signupApiRouter);
 app.use("/resumes", checkUser, resumesApiRouter);
+// app.use("/resumes/delete", checkUser, resumesApiRouter);
 app.use("/logout", logoutApiRouter);
 app.use("/isauth", authApiRouter);
 
@@ -59,7 +58,11 @@ mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) =>
     app.listen(process.env.PORT || 3050, "0.0.0.0", () => {
-      console.log(`Express web server started: http://0.0.0.0:${process.env.PORT || 3050}}`);
+      console.log(
+        `Express web server started: http://0.0.0.0:${
+          process.env.PORT || 3050
+        }}`
+      );
       console.log(`Serving content from /${process.env.PORT || 3050}/`);
     })
   )
@@ -88,15 +91,16 @@ app.get("/set-cookies", (req, res) => {
 //   console.log(cookies);
 //   res.json(cookies);
 // });
-// // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-//   // render the error page
-//   res.status(err.status || 500);
-//   res.render('error');
-// });
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
+});
 
 module.exports = app;
