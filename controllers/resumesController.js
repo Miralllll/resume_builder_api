@@ -24,7 +24,10 @@ module.exports.profile_post = async (req, res) => {
 };
 
 module.exports.delete_post = async (req, res) => {
-  if (res.locals.user === null) res.status(401).send();
+  if (res.locals.user === null) {
+    res.status(401).send();
+    return;
+  }
   const { title } = req.body;
   try {
     await Document.deleteOne({ title: title });
