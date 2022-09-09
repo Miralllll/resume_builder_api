@@ -68,6 +68,8 @@ mongoose
   )
   .catch((err) => console.log(err));
 
+app.proxy = true;
+
 // Without session this cookie remains in the browser before we will close the browser.
 app.get("/set-cookies", (req, res) => {
   // res.setHeader('Set-Cookie', 'newUser=true');
@@ -78,9 +80,11 @@ app.get("/set-cookies", (req, res) => {
   // httpOnly: true -- no fronend access to it -- onyl transporting
   res.cookie("isEmployee", true, {
     maxAge: 1000 * 60 * 60 * 24,
-    domain: "https://r-esume-b-uilder.herokuapp.com/",
-    secure: true,
     httpOnly: true,
+    signed: true,
+    secure: process.env.NODE_ENV === "production",
+    domain: process.env.ORIGIN_HOSTNAME || "localhost",
+    sameSite: 'none' // <-- add this
   });
   res.send("you got the cookies!");
 });

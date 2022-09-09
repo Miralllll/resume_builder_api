@@ -11,6 +11,10 @@ const latex = require("node-latex");
 const { join, resolve } = require("path");
 
 module.exports.upload_post = async (req, res) => {
+  if (res.locals.user === null) {
+    res.status(401).send({});
+    return;
+  }
   let binaryVersion = atob(req.body.file.toString("base64"));
   let text = binaryVersion.toString();
   const options = {

@@ -65,15 +65,14 @@ module.exports.get_post = async (req, res) => {
   }
   const { label } = req.body;
   console.log(label);
-  const doc = {};
   try {
-    doc = await Document.findOne({
+    var doc = await Document.findOne({
       createdBy: res.locals.user._id,
       title: label,
     });
+    res.status(200).json({ document: doc.document, formInfo: doc.formInfo });
   } catch (err) {
     console.log(err);
     res.status(400).json({ errors: err });
   }
-  res.status(200).json({ document: doc.document, formInfo: doc.formInfo });
 };
