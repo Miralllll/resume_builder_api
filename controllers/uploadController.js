@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const Document = require("../models/Document");
+const {updateLatex} = require("../latexParser/jsonToLatex");
 
 module.exports.upload_get = async (req, res) => {
   res.send("respond with a resource");
@@ -18,7 +19,10 @@ module.exports.upload_post = async (req, res) => {
     passes: 2,
   };
   res.setHeader("Content-Type", "application/pdf");
+  text = await updateLatex(text, req.body.form);
+  console.log(" " + text);
   const pdf = latex(text, options);
+  
   if (res.locals.user !== null && res.locals.user !== undefined) {
     // it should be same document actually, because i do nto have label now, it is okay
     var doc = await Document.addOrUpdate(

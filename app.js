@@ -30,7 +30,7 @@ app.set("trust proxy", 1);
 app.use(fileupload());
 app.use(methodOverride("_method"));
 
-app.use(cors({ credentials: true, origin: "https://r-esume-b-uilder.herokuapp.com/" }));
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use("/files", express.static(path.join(__dirname, "upload")));
 app.use(logger("dev"));
 app.use(express.json());
