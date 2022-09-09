@@ -5,11 +5,14 @@ const { join, resolve } = require("path");
 module.exports.profile_get = async (req, res) => {
   console.log("profile get");
   if (res.locals.user === null) res.status(401).send();
-  res.status(200).send();
+  else res.status(200).send();
 };
 
 module.exports.profile_post = async (req, res) => {
-  if (res.locals.user === null) res.status(401).send();
+  if (res.locals.user === null) {
+    res.status(401).send();
+    return;
+  }
   try {
     var required_fields = ["title", "createdDate", "document"];
     var docs = await Document.getAll(res.locals.user._id, required_fields);
@@ -33,7 +36,10 @@ module.exports.delete_post = async (req, res) => {
 };
 
 module.exports.add_post = async (req, res) => {
-  if (res.locals.user === null) res.status(401).send({ errors: "Not Auth" });
+  if (res.locals.user === null) {
+    res.status(401).send({ errors: "Not Auth" });
+    return
+  }
   const { title, formInfo, document } = req.body;
   try {
     var doc = await Document.addOrUpdate(
@@ -50,16 +56,21 @@ module.exports.add_post = async (req, res) => {
 };
 
 module.exports.get_post = async (req, res) => {
-  if (res.locals.user === null) res.status(401).send({ errors: "Not Auth" });
+  if (res.locals.user === null) {
+    res.status(401).send({ errors: "Not Auth" });
+    return;
+  }
   const { label } = req.body;
+  console.log(label);
+  const doc = {};
   try {
-    const doc = await Document.findOne({
+    doc = await Document.findOne({
       createdBy: res.locals.user._id,
       title: label,
     });
-    res.status(200).json({ document: doc.document, formInfo: doc.formInfo });
   } catch (err) {
     console.log(err);
     res.status(400).json({ errors: err });
   }
+  res.status(200).json({ document: doc.document, formInfo: doc.formInfo });
 };
